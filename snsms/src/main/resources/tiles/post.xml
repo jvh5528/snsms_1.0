@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="newPost" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/newPost.jsp"/>
+		<put-attribute name="title" value="Upload • myFeed"/>
+	</definition>
+	
+	<definition name="postDetailView" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/postDetailView.jsp"/>
+		<put-attribute name="title" value="View post • myFeed"/>
+	</definition>
+	
+	<definition name="editPost" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/editPost.jsp"/>
+		<put-attribute name="title" value="Edit post • myFeed"/>
+	</definition>
+	
+	<definition name="deletePost" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/deletePost.jsp"/>
+		<put-attribute name="title" value="Delete post • myFeed"/>
+	</definition>
+	
+	<definition name="newComment" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/comment/newComment.jsp"/>
+		<put-attribute name="title" value="New comment • myFeed"/>
+	</definition>
+	
+	<definition name="commentList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/comment/viewComments.jsp"/>
+		<put-attribute name="title" value="View comments • myFeed"/>
+	</definition>
+	
+	<definition name="likesList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/likesList.jsp"/>
+		<put-attribute name="title" value="View post likes • myFeed"/>
+	</definition>
+	
+	<definition name="notifications" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/myNotificationsList.jsp"/>
+		<put-attribute name="title" value="New activity • myFeed"/>
+	</definition>
+	
+	<definition name="homeMediaList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/homeMediaList.jsp"/>
+		<put-attribute name="title" value="Home • myFeed"/>
+	</definition>
+	
+	<definition name="exploreMediaList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/post/explorePage.jsp"/>
+		<put-attribute name="title" value="Explore • myFeed"/>
+	</definition>
+	
+	
+</tiles-definitions>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="postMapper">
+
+	<select id="selectOneMemberPostCnt" parameterType="String" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				UPLOAD
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<insert id="insertPost" parameterType="PostDTO">
+		INSERT INTO UPLOAD(
+			USERNAME,
+			PHOTO,
+			CAPTION,
+			SELL_YN,
+			PRICE,
+			STOCK,
+			DELIVERY_PRICE
+		)
+		VALUES(
+			#{username},
+			#{photo},
+			#{caption},
+			#{sellYn},
+			#{price},
+			#{stock},
+			#{deliveryPrice}
+		)
+	</insert>
+	
+	<resultMap type="hashmap" id="postDetail">
+		<result column="USERNAME" property="username"/>
+		<result column="PHOTO" property="photo"/>
+		<result column="CAPTION" property="caption"/>
+		<result column="SELL_YN" property="sellYn"/>
+		<result column="PRICE" property="price"/>
+		<result column="STOCK" property="stock"/>
+		<result column="DELIVERY_PRICE" property="deliveryPrice"/>
+		<result column="UPLOAD_DT" property="uploadDt"/>
+		<result column="LIKEDBY_USERNAME" property="likedbyUsername"/>
+		<result column="COMMENT" property="comment"/>
+		<result column="COMMENTER" property="commenter"/>
+		<result column="COMMENTER_PIC" property="commenterPic"/>
+		<result column="COMMENT_DT" property="commentDt"/>
+	</resultMap>
+	
+	<select id="selectPostDetail" parameterType="int" resultType="PostDTO">
+		SELECT
+				*
+		FROM
+				UPLOAD
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<select id="selectPostList" parameterType="String" resultType="PostDTO">
+		SELECT
+				*
+		FROM
+				UPLOAD
+		WHERE
+				USERNAME = #{username}
+		ORDER BY
+				UPLOAD_DT DESC
+	</select>
+	
+	<select id="selectOneEditPost" parameterType="int" resultType="PostDTO">
+		SELECT
+				*
+		FROM
+				UPLOAD
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<update id="updatePost" parameterType="PostDTO">
+		UPDATE
+				UPLOAD
+		SET
+			CAPTION = #{caption},
+			SELL_YN = #{sellYn},
+			STOCK = #{stock},
+			PRICE = #{price},
+			DELIVERY_PRICE = #{deliveryPrice}
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</update>
+	
+	<select id="selectOneDeletePost" parameterType="int" resultType="String">
+		SELECT
+				PHOTO
+		FROM
+				UPLOAD
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<delete id="deletePost" parameterType="int">
+		DELETE FROM
+				UPLOAD
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</delete>
+	
+	<select id="selectListHome" parameterType="hashmap" resultType="PostDTO">
+		SELECT
+				
+		       *
+		FROM
+				  UPLOAD U
+				  JOIN  FOLLOWING F
+				    ON  U.USERNAME = F.FOLLOWING_USERNAME
+		WHERE
+				F.FOLLOWING_USERNAME IN
+				<foreach collection="followingList" item="followingUsername" open="(" close=")" separator=",">
+					#{followingUsername}
+				</foreach>
+				AND F.USERNAME = #{username}
+				
+	</select>
+	
+	<select id="selectMyFollowingPostCnt" parameterType="hashmap" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				UPLOAD U
+				JOIN FOLLOWING F
+				  ON U.USERNAME = F.FOLLOWING_USERNAME
+		WHERE
+				F.FOLLOWING_USERNAME IN
+				<foreach collection="followingList" item="followingUsername" open="(" close=")" separator=",">
+					#{followingUsername}
+				</foreach>
+				AND F.USERNAME = #{username}
+	</select>
+	
+	<select id="selectListExploreMediaList" resultType="PostDTO">
+		SELECT
+				*
+		FROM
+				UPLOAD
+				
+		ORDER BY
+				UPLOAD_DT DESC
+	</select>
+	
+	<select id="selectProductCheck" parameterType="int" resultType="String">
+		SELECT
+				SELL_YN
+		FROM
+				UPLOAD
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+</mapper>

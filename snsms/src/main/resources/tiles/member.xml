@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="register" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/account/register.jsp"/>
+		<put-attribute name="title" value="Create an account"/>
+	</definition>
+	
+	<definition name="login" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/account/login.jsp"/>
+		<put-attribute name="title" value="Log into account"/>
+	</definition>
+	
+	<definition name="memberInfo" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/account/memberInfo.jsp"/>
+		<put-attribute name="title" value="Member details • myFeed"/>
+	</definition>
+	
+	<definition name="memberList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/memberList.jsp"/>
+		<put-attribute name="title" value="myFeed"/>
+	</definition>
+	
+	<definition name="memberDetail" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/memberDetail.jsp"/>
+		<put-attribute name="title" value="myFeed"/>
+	</definition>
+	
+	
+</tiles-definitions>

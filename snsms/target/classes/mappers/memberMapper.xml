@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberMapper">
+
+	<insert id="insertMember" parameterType="MemberDTO">
+		INSERT INTO MEMBER(
+			USERNAME,
+			PASSWD,
+			NAME,
+			EMAIL,
+			USER_STATUS,
+			PASSWD_DT
+		)
+		VALUES(
+			#{username},
+			#{passwd},
+			#{name},
+			#{email},
+			#{userStatus},
+			NOW()
+		)
+	</insert>
+	
+	<select id="selectDuplicateId" parameterType="String" resultType="MemberDTO">
+		SELECT
+				*
+		FROM	
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectMemberStatus" parameterType="String" resultType="MemberDTO">
+		SELECT
+				USER_STATUS
+		FROM
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<update id="updateStatus" parameterType="MemberDTO">
+		UPDATE
+				MEMBER
+		SET
+				USER_STATUS = #{userStatus}
+		WHERE
+				USERNAME = #{username}
+	</update>
+	
+	<update id="updatePassword" parameterType="MemberDTO">
+		UPDATE
+				MEMBER
+		SET
+				PASSWD = #{passwd},
+				PASSWD_DT = NOW()
+		WHERE
+				USERNAME = #{username}
+	</update>
+	
+	<select id="selectUserStatus" parameterType="String" resultType="String">
+		SELECT
+				USER_STATUS
+		FROM
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectLogin" parameterType="String" resultType="MemberDTO">
+		SELECT
+				*
+		FROM
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectOneMemberDetail" parameterType="String" resultType="MemberDTO">
+		SELECT
+				*
+		FROM	
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectOnePasswd" parameterType="String" resultType="String">
+		SELECT
+				PASSWD
+		FROM
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	
+	<select id="selectMyCartCnt" parameterType="String" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				CART
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectMyOrderCnt" resultType="int" parameterType="String">
+	  		SELECT
+	  				COUNT(*)
+	  		FROM
+	  				`ORDER`
+	  		WHERE
+	  				USERNAME = #{username}
+  	</select>
+</mapper>

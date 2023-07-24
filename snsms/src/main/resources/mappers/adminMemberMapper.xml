@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminMemberMapper">
+	
+	<select id="selectAdminLogin" resultType="AdminDTO" parameterType="String">
+		SELECT 
+				* 
+		FROM 
+				`ADMIN`
+		WHERE 
+				ADMIN_ID = #{adminId} AND PASSWD = #{passwd}
+	</select>
+	
+	<select id="selectListMember" resultType="MemberDTO" >
+		  SELECT  
+    				*  
+    	  FROM 
+    				MEMBER 
+    	  ORDER BY
+    	  			ENROLL_DT DESC
+	</select>
+
+	<select id="selectOneMember" parameterType="String" resultType="MemberDTO" >
+		  SELECT  
+    				*  
+    	  FROM 
+    				MEMBER 
+    	  WHERE
+    	  			USERNAME = #{username}
+	</select>
+	
+	
+	<select id="selectListDailyNewMember" resultType="MemberDTO">
+		SELECT
+				*
+		FROM
+				MEMBER
+		WHERE
+				LEFT(ENROLL_DT , 10) = #{today}
+	</select>
+	
+
+	<select id="selectMembersPasswdDtBefore" resultType="MemberDTO">
+	     <![CDATA[
+		    SELECT
+		        *
+		    FROM
+		        MEMBER
+		    WHERE
+		        PASSWD_DT <= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+		 ]]>
+	</select>
+	
+</mapper>

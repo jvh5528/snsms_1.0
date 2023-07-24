@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="profileMapper">
+	<insert id="insertProfile" parameterType="ProfileDTO">
+		INSERT INTO PROFILE(
+			USERNAME,
+			NAME,
+			BIO,
+			PROFILE_PIC,
+			GENDER,
+			CUSTOM_GENDER
+		)
+		VALUES(
+			#{username},
+			#{name},
+			#{bio},
+			#{profilePic},
+			#{gender},
+			#{customGender}
+		)
+	</insert>
+	
+	<select id="selectOneProfile" parameterType="String" resultType="ProfileDTO">
+		SELECT
+				*
+		FROM
+				PROFILE
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<update id="updateProfile" parameterType="ProfileDTO">
+		UPDATE
+				PROFILE
+		<set>
+			<if test='name != null and name != ""'>
+	        	NAME = #{name},
+	      	</if>
+			<if test='bio != null and bio != ""'>
+	        	BIO = #{bio},
+	      	</if>
+			<if test='profilePic != null and profilePic != ""'>
+	        	PROFILE_PIC = #{profilePic},
+	      	</if>
+			<if test='gender != null and gender != ""'>
+	        	GENDER = #{gender},
+	      	</if>
+			<if test='customGender == null or customGender == ""'>
+	        	CUSTOM_GENDER = #{customGender}
+	      	</if>
+		</set>
+		WHERE
+				USERNAME = #{username}
+	</update>
+	
+	<select id="selectListMember" resultType="ProfileDTO">
+		SELECT
+				*
+		FROM
+				PROFILE
+	</select>
+	
+	<select id="selectListSearchMember" parameterType="hashmap" resultType="ProfileDTO">
+		<if test='method == "search"'>
+			SELECT
+					*
+			FROM
+					PROFILE
+			WHERE
+					NAME LIKE CONCAT('%' , #{word} , '%') OR
+					USERNAME LIKE CONCAT('%' , #{word}, '%')
+					
+		</if>
+	</select>
+	
+	<select id="selectOneMember" parameterType="String" resultType="ProfileDTO">
+		SELECT
+				*
+		FROM	
+				PROFILE
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<delete id="deleteMember" parameterType="String">
+		DELETE FROM
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteMemberProfile" parameterType="String">
+		DELETE FROM
+				PROFILE
+		WHERE
+				USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteCartListByRemoveMember" parameterType="String">
+		DELETE FROM
+				CART
+		WHERE
+				USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteOrderListByRemoveMember" parameterType="String">
+		DELETE FROM
+				`ORDER`
+		WHERE
+				USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteLikeByRemoveMember" parameterType="String">
+		DELETE FROM
+				`LIKE`
+		WHERE
+				LIKEDBY_USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteCommentByRemoveMember" parameterType="String">
+		DELETE FROM
+				COMMENT
+		WHERE
+				COMMENTER = #{username}
+	</delete>
+	
+	<delete id="deletePostByRemoveMember" parameterType="String">
+		DELETE FROM
+				UPLOAD
+		WHERE
+				USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteFollowingByRemoveMember" parameterType="String">
+		DELETE FROM
+				FOLLOWING
+		WHERE
+				USERNAME = #{username} OR
+				FOLLOWING_USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteFollowerByRemoveMember" parameterType="String">
+		DELETE FROM
+				FOLLOWER
+		WHERE
+				FOLLOWER_USERNAME = #{username} OR
+				FOLLOW_USERNAME = #{username}
+	</delete>
+	
+	<select id="selectOneDuplicatedCart" parameterType="hashmap" resultType="CartDTO">
+		SELECT
+				*
+		FROM
+				CART
+		WHERE
+				USERNAME = #{username} AND
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<insert id="insertCart" parameterType="CartDTO">
+		INSERT INTO
+			CART (MEDIA_CD,
+				  CART_GOODS_QTY,
+				  USERNAME,
+				  ENROLL_DT
+		)
+		VALUES (
+				#{mediaCd},
+				#{cartGoodsQty},
+				#{username},
+				NOW()
+		)
+	</insert>
+	
+	<resultMap type="hashmap" id="cartMap">
+		<result column="CART_CD"     	  property="cartCd"/>
+  		<result column="USERNAME"    	  property="username"/>
+  		<result column="CART_GOODS_QTY"   property="cartGoodsQty"/>
+  		<result column="ENROLL_DT"   	  property="enrollDt"/>
+  		<result column="MEDIA_CD" 		  property="mediaCd"/>
+  		<result column="PHOTO"   	  	  property="photo"/>
+  		<result column="PRICE"   	  	  property="price"/>
+  		<result column="STOCK"   	  	  property="stock"/>
+	</resultMap>
+	
+	<select id="selectListMyCart" parameterType="String" resultMap="cartMap">
+		SELECT
+				C.CART_CD	  	   AS CART_CD,
+				C.USERNAME         AS USERNAME,
+				C.CART_GOODS_QTY   AS CART_GOODS_QTY,
+				C.ENROLL_DT		   AS ENROLL_DT,
+				U.MEDIA_CD  	   AS MEDIA_CD,
+				U.PHOTO		   	   AS PHOTO,
+				U.PRICE    		   AS PRICE,
+				U.STOCK			   AS STOCK
+		FROM
+				CART C
+		  JOIN UPLOAD U
+		  		  ON C.MEDIA_CD = U.MEDIA_CD			
+		WHERE
+				C.USERNAME = #{username}
+		ORDER BY
+				C.ENROLL_DT DESC
+	</select>
+	
+	<delete id="deleteCart">
+		DELETE FROM
+				CART
+		WHERE
+				CART_CD IN
+		<foreach collection="array" item="cartCd" separator="," open="("  close=")">
+			#{cartCd}
+		</foreach>
+	</delete>
+	
+	<update id="updateCartGoodsQty" parameterType="hashmap">
+		UPDATE
+				CART
+		SET
+				CART_GOODS_QTY = #{cartGoodsQty}
+		WHERE
+				CART_CD = #{cartCd}
+	</update>
+	
+	<select id="selectCountMyCart" parameterType="String" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				CART
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<resultMap type="hashmap" id="myOrderListMap">
+		<result column="ORDER_CD" 		 property="orderCd"/>
+		<result column="USERNAME" 		 property="username"/>
+		<result column="ORDER_MEDIA_QTY" property="orderMediaQty"/>
+		<result column="PAYMENT_AMT" 	 property="paymentAmt"/>
+		<result column="PAY_ORDER_TIME"  property="payOrderTime"/>
+		<result column="MEDIA_CD" 		 property="goodsCd"/>
+		<result column="PRICE" 		 	 property="price"/>
+		<result column="PHOTO" 			 property="photo"/>
+	</resultMap>
+	
+	<select id="selectListMyOrder" parameterType="String" resultMap="myOrderListMap">
+		SELECT
+				O.ORDER_CD 		  	AS ORDER_CD,
+				O.USERNAME			AS USERNAME,
+		        O.ORDER_MEDIA_QTY 	AS ORDER_MEDIA_QTY,
+		        O.PAYMENT_AMT 		AS PAYMENT_AMT,
+		        O.PAY_ORDER_TIME  	AS PAY_ORDER_TIME,
+		        U.MEDIA_CD  	  	AS MEDIA_CD,
+		        U.PRICE				AS PRICE,
+		        U.PHOTO 			AS PHOTO
+		FROM
+				`ORDER` O
+			JOIN UPLOAD  U
+				    ON  O.MEDIA_CD = U.MEDIA_CD
+				   AND  O.USERNAME = #{username}
+		ORDER BY
+				PAY_ORDER_TIME DESC
+	</select>
+	
+	<resultMap type="hashmap" id="myOrderDetailMap">
+		<result column="ORDER_CD" 		 	property="orderCd"/>
+		<result column="ORDER_MEDIA_QTY" 	property="orderMediaQty"/>
+		<result column="PAYMENT_AMT" 		property="paymentAmt"/>
+		<result column="ORDERER_NM"  		property="ordererNm"/>
+		<result column="ORDERER_HP" 		property="ordererHp"/>
+		<result column="RECEIVER_NM" 		property="receiverNm"/>
+		<result column="RECEIVER_HP" 		property="receiverHp"/>
+		<result column="ZIPCODE" 			property="zipcode"/>
+		<result column="ROAD_ADDRESS" 		property="roadAddress"/>
+		<result column="JIBUN_ADDRESS" 		property="jibunAddress"/>
+		<result column="NAMUJI_ADDRESS" 	property="namujiAddress"/>
+		<result column="DELIVERY_METHOD" 	property="deliveryMethod"/>
+		<result column="DELIVERY_MESSAGE" 	property="deliveryMessage"/>
+		<result column="GIFT_WRAPPING" 		property="giftWrapping"/>
+		<result column="PAY_METHOD" 		property="payMethod"/>
+		<result column="PAY_ORDERER_HP" 	property="payOrdererHp"/>
+		<result column="PAY_ORDER_TIME" 	property="payOrderTime"/>
+		<result column="CARD_COMPANY_NM" 	property="cardCompanyNm"/>
+		<result column="CARD_PAY_MONTH" 	property="cardPayMonth"/>
+		<result column="DELIVERY_STATUS" 	property="deliveryStatus"/>
+		<result column="MEDIA_CD" 			property="mediaCd"/>
+		<result column="PRICE" 				property="price"/>
+		<result column="DELIVERY_PRICE" 	property="deliveryPrice"/>
+	</resultMap>
+	
+	<select id="selectOneMyOrder" parameterType="hashmap" resultMap="myOrderDetailMap">
+		SELECT
+				O.ORDER_CD		   AS ORDER_CD,
+		        O.ORDER_MEDIA_QTY  AS ORDER_MEDIA_QTY,
+		        O.PAYMENT_AMT 	   AS PAYMENT_AMT,
+		        O.ORDERER_NM	   AS ORDERER_NM,
+		        O.ORDERER_HP 	   AS ORDERER_HP,
+		        O.RECEIVER_NM 	   AS RECEIVER_NM,
+		        O.RECEIVER_HP 	   AS RECEIVER_HP,
+		        O.ZIPCODE 		   AS ZIPCODE,
+		        O.ROAD_ADDRESS     AS ROAD_ADDRESS,
+		        O.JIBUN_ADDRESS    AS JIBUN_ADDRESS,
+		        O.NAMUJI_ADDRESS   AS NAMUJI_ADDRESS,
+		        O.DELIVERY_METHOD  AS DELIVERY_METHOD,
+		        O.DELIVERY_MESSAGE AS DELIVERY_MESSAGE,
+		        O.GIFT_WRAPPING    AS GIFT_WRAPPING,
+		        O.PAY_METHOD 	   AS PAY_METHOD,
+		        O.PAY_ORDERER_HP   AS PAY_ORDERER_HP,
+		        O.PAY_ORDER_TIME   AS PAY_ORDER_TIME,
+		        O.CARD_COMPANY_NM  AS CARD_COMPANY_NM,
+		        O.CARD_PAY_MONTH   AS CARD_PAY_MONTH,
+		        O.DELIVERY_STATUS  AS DELIVERY_STATUS,
+		        U.MEDIA_CD 		   AS MEDIA_CD,
+		        U.PRICE 		   AS PRICE,
+		        U.DELIVERY_PRICE   AS DELIVERY_PRICE
+		FROM
+				`ORDER` O
+			JOIN MEMBER M
+					 ON M.USERNAME = O.USERNAME
+					AND M.USERNAME = #{username}
+		     JOIN UPLOAD U
+					 ON U.MEDIA_CD = O.MEDIA_CD
+					AND O.ORDER_CD = #{orderCd}
+	</select>
+	
+	<select id="selectMyMediaCdList" parameterType="String" resultType="int">
+		SELECT
+				MEDIA_CD
+		FROM
+				UPLOAD
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<resultMap type="hashmap" id="incomingOrderListMap">
+		<result column="ORDER_CD" 		 	property="orderCd"/>
+		<result column="ORDER_MEDIA_QTY" 	property="orderMediaQty"/>
+		<result column="PAY_ORDER_TIME"  	property="payOrderTime"/>
+		<result column="USERNAME"  	 		property="username"/>
+		<result column="DELIVERY_STATUS"  	property="deliveryStatus"/>
+		<result column="MEDIA_CD" 		 	property="mediaCd"/>
+		<result column="PRICE" 		 	 	property="price"/>
+		<result column="PHOTO" 				property="photo"/>
+	</resultMap>
+	
+	<select id="selectListIncomingOrder" resultMap="incomingOrderListMap">
+	    SELECT
+	        O.ORDER_CD AS ORDER_CD,
+	        O.ORDER_MEDIA_QTY AS ORDER_MEDIA_QTY,
+	        O.PAY_ORDER_TIME AS PAY_ORDER_TIME,
+	        O.USERNAME AS USERNAME,
+	        O.DELIVERY_STATUS AS DELIVERY_STATUS,
+	        U.MEDIA_CD AS MEDIA_CD,
+	        U.PRICE AS PRICE,
+	        U.PHOTO AS PHOTO
+	    FROM
+	        `ORDER` O
+	    JOIN
+	        UPLOAD U ON O.MEDIA_CD = U.MEDIA_CD
+	    WHERE
+	        <choose>
+	            <when test="list != null and !list.isEmpty()">
+	                U.MEDIA_CD IN
+	                <foreach collection="list" item="mediaCd" separator="," open="(" close=")">
+	                    #{mediaCd}
+	                </foreach>
+	            </when>
+	            <otherwise>
+	                1 = 0  
+	            </otherwise>
+	        </choose>
+	     ORDER BY
+	     	PAY_ORDER_TIME DESC
+	</select>
+	
+</mapper>

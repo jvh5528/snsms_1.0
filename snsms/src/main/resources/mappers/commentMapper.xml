@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="commentMapper">
+
+	<select id="selectOnePostCommentCnt" parameterType="int" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				COMMENT
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<insert id="insertComment">
+		INSERT INTO
+			COMMENT(
+				MEDIA_CD,
+				COMMENT,
+				COMMENTER,
+				COMMENTER_PIC
+			)
+			VALUES(
+				#{mediaCd},
+				#{comment},
+				#{commenter},
+				#{commenterPic}
+			)
+	</insert>
+	
+	<select id="selectCommentList" parameterType="int" resultType="CommentDTO">
+		SELECT
+				*
+		FROM
+				COMMENT
+		WHERE
+				MEDIA_CD = #{mediaCd}
+		ORDER BY
+				COMMENT_DT DESC
+	</select>
+	
+	<select id="selectCommentListRecent" parameterType="int" resultType="CommentDTO">
+		SELECT
+				*
+		FROM
+				COMMENT
+		WHERE
+				MEDIA_CD = #{mediaCd}
+		ORDER BY
+				COMMENT_DT DESC
+		LIMIT
+				5
+	</select>
+	
+	<select id="selectMyCommentList" resultType="CommentDTO">
+		SELECT
+				*
+		FROM	
+				COMMENT
+		WHERE
+				MEDIA_CD IN
+	    		<foreach collection="myMediaCdList" item="mediaCd" open="(" close=")" separator=",">
+	    			#{mediaCd}
+	    		</foreach>
+	    ORDER BY
+	    		COMMENT_DT DESC
+	</select>
+</mapper>

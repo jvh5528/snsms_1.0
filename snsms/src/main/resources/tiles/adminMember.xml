@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	
+	<definition name="adminLogin" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/admin/member/adminLogin.jsp"/>
+		<put-attribute name="title" value="Admin • myFeed"/>
+	</definition>
+	
+	<definition name="adminMemberList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/admin/member/adminMemberList.jsp"/>
+		<put-attribute name="title" value="Admin • myFeed"/>
+	</definition>
+	
+	<definition name="dailyNewMemberList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/admin/member/dailyNewMemberList.jsp"/>
+		<put-attribute name="title" value="Admin • myFeed"/>
+	</definition>
+	
+	<definition name="adminHome" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/admin/member/adminHome.jsp"/>
+		<put-attribute name="title" value="Admin • myFeed"/>
+	</definition>
+	
+</tiles-definitions>

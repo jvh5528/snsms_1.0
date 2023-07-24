@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="adminOrderMapper">
+
+	<resultMap type="hashmap" id="orderListMap">
+		<result column="ORDER_CD" 		 	property="orderCd"/>
+		<result column="ORDER_MEDIA_QTY" 	property="orderMediaQty"/>
+		<result column="PAY_ORDER_TIME"  	property="payOrderTime"/>
+		<result column="USERNAME"  	 		property="username"/>
+		<result column="DELIVERY_STATUS"  	property="deliveryStatus"/>
+		<result column="MEDIA_CD" 		 	property="mediaCd"/>
+		<result column="PRICE" 		 	 	property="price"/>
+		<result column="PHOTO" 				property="photo"/>
+	</resultMap>
+
+	<select id="selectFullOrderList" resultMap="orderListMap">
+		SELECT
+				O.ORDER_CD 		  	AS ORDER_CD,
+		        O.ORDER_MEDIA_QTY 	AS ORDER_MEDIA_QTY,
+		        O.PAY_ORDER_TIME  	AS PAY_ORDER_TIME,
+		        O.USERNAME			AS USERNAME,
+		        O.DELIVERY_STATUS	AS DELIVERY_STATUS,
+		        U.MEDIA_CD  	  	AS MEDIA_CD,
+		        U.PRICE				AS PRICE,
+		        U.PHOTO 			AS PHOTO
+		FROM
+				`ORDER` O
+				  JOIN  UPLOAD  U
+				    ON  O.MEDIA_CD = U.MEDIA_CD
+		ORDER BY
+				PAY_ORDER_TIME DESC
+	</select>
+	
+	<select id="selectMostOrderedList" resultMap="orderListMap">
+		SELECT 
+			O.ORDER_CD, 
+			O.ORDER_MEDIA_QTY, 
+			O.PAY_ORDER_TIME, 
+			O.USERNAME, 
+			O.DELIVERY_STATUS, 
+			U.MEDIA_CD, 
+			U.PRICE, 
+			U.PHOTO
+		FROM (
+		    SELECT U.MEDIA_CD, COUNT(*) AS order_count
+		    FROM `ORDER` O
+		    JOIN UPLOAD U ON O.MEDIA_CD = U.MEDIA_CD
+		    GROUP BY U.MEDIA_CD
+		) AS counts
+		JOIN `ORDER` O 
+		  ON O.MEDIA_CD = counts.MEDIA_CD
+		JOIN UPLOAD U 
+		  ON U.MEDIA_CD = counts.MEDIA_CD
+		ORDER BY 
+			counts.order_count DESC;
+	</select>
+	
+	<select id="selectOrderAmountList" resultMap="orderListMap">
+		SELECT 
+			O.ORDER_CD, 
+			O.ORDER_MEDIA_QTY, 
+			O.PAY_ORDER_TIME, 
+			O.USERNAME, 
+			O.DELIVERY_STATUS, 
+			U.MEDIA_CD, 
+			U.PRICE, 
+			U.PHOTO
+		FROM (
+		    SELECT U.MEDIA_CD, 
+		    COUNT(*) AS order_count
+		    FROM `ORDER` O
+		    JOIN UPLOAD U 
+		      ON O.MEDIA_CD = U.MEDIA_CD
+		    GROUP BY U.MEDIA_CD
+		) AS counts
+		JOIN `ORDER` O 
+		  ON O.MEDIA_CD = counts.MEDIA_CD
+		JOIN UPLOAD U 
+		  ON U.MEDIA_CD = counts.MEDIA_CD
+		ORDER BY 
+			U.PRICE DESC;
+		
+	</select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">	
+
+<configuration>
+
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.application.snsms.member.dto.MemberDTO" alias="MemberDTO"/>
+		<typeAlias type="com.application.snsms.profile.dto.ProfileDTO" alias="ProfileDTO"/>
+		<typeAlias type="com.application.snsms.follow.dto.FollowerDTO" alias="FollowerDTO"/>
+		<typeAlias type="com.application.snsms.follow.dto.FollowingDTO" alias="FollowingDTO"/>
+		<typeAlias type="com.application.snsms.post.dto.PostDTO" alias="PostDTO"/>
+		<typeAlias type="com.application.snsms.like.dto.LikeDTO" alias="LikeDTO"/>
+		<typeAlias type="com.application.snsms.comment.dto.CommentDTO" alias="CommentDTO"/>
+		<typeAlias type="com.application.snsms.profile.dto.CartDTO" alias="CartDTO"/>
+		<typeAlias type="com.application.snsms.order.dto.OrderDTO" alias="OrderDTO"/>
+		<typeAlias type="com.application.snsms.admin.member.dto.AdminDTO" alias="AdminDTO"/>
+	</typeAliases>
+	
+</configuration>

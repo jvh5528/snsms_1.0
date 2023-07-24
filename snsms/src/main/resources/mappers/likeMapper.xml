@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="likeMapper">
+
+	<select id="selectOneDuplicatedLike" parameterType="String" resultType="LikeDTO">
+		SELECT
+				MEDIA_CD
+		FROM
+				`LIKE`
+		WHERE
+				LIKEDBY_USERNAME = #{likedbyUsername}
+	</select>
+	
+	<select id="likeYn" parameterType="hashmap" resultType="String">
+		SELECT
+				LIKEDBY_USERNAME
+		FROM
+				`LIKE`
+		WHERE
+				MEDIA_CD = #{mediaCd} AND
+				LIKEDBY_USERNAME = #{username}
+	</select>
+	
+	<insert id="insertLike" parameterType="LikeDTO">
+		INSERT INTO
+			`LIKE`(
+				MEDIA_CD,
+				LIKEDBY_USERNAME,
+				LIKEDBY_PROFILEPIC
+			)
+			VALUES(
+				#{mediaCd},
+				#{likedbyUsername},
+				#{likedbyProfilepic}
+			)
+	</insert>
+	
+	<select id="selectOnePostLikesCnt" parameterType="int" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				`LIKE`
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<select id="selectLikesList" parameterType="int" resultType="LikeDTO">
+		SELECT
+				*
+		FROM
+				`LIKE`
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+	
+	<select id="selectMyLikesList" resultType="LikeDTO">
+		SELECT
+				*
+		FROM
+				`LIKE` L
+				JOIN UPLOAD U
+				  ON L.MEDIA_CD = U.MEDIA_CD
+	    WHERE
+	    		L.MEDIA_CD IN
+	    		<foreach collection="myMediaCdList" item="mediaCd" open="(" close=")" separator=",">
+	    			#{mediaCd}
+	    		</foreach>
+	    ORDER BY
+	    		L.LIKE_DT DESC
+	</select>
+	
+	<delete id="deleteLike" parameterType="LikeDTO">
+		DELETE FROM
+				`LIKE`
+		WHERE
+				MEDIA_CD = #{mediaCd} AND
+				LIKEDBY_USERNAME = #{likedbyUsername}
+	</delete>
+</mapper>

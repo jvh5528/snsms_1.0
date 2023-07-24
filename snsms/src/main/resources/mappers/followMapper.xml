@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="followMapper">
+
+	<select id="selectOneMemberFollowersCnt" parameterType="String" resultType="int">
+		SELECT
+				COUNT(FOLLOWER_USERNAME)
+		FROM
+				FOLLOWER
+		WHERE
+				FOLLOW_USERNAME = #{username}
+	</select> 
+	
+	<select id="selectOneMemberFollowingCnt" parameterType="String" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				FOLLOWING
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectListFollowers" parameterType="String" resultType="FollowerDTO">
+		SELECT
+				*
+		FROM
+				FOLLOWER
+		WHERE
+				FOLLOW_USERNAME = #{username}
+		ORDER BY
+				FOLLOW_DT DESC
+	</select>
+	
+	<select id="selectListFollowingUsername" parameterType="String" resultType="String">
+			SELECT
+					FOLLOWING_USERNAME
+			FROM
+					FOLLOWING
+			WHERE
+					USERNAME = #{username}
+	</select>
+	
+	<select id="selectListFollowing" parameterType="String" resultType="FollowingDTO">
+		SELECT
+				*
+		FROM
+				FOLLOWING
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<insert id="insertFollowing" parameterType="FollowingDTO">
+		INSERT INTO FOLLOWING(
+			USERNAME,
+			FOLLOWING_USERNAME,
+			FOLLOWING_NAME,
+			FOLLOWING_PIC
+		)
+		VALUES(
+			#{username},
+			#{followingUsername},
+			#{followingName},
+			#{followingPic}
+		)
+	</insert>
+	
+	<insert id="insertFollower" parameterType="FollowerDTO">
+		INSERT INTO FOLLOWER(
+			FOLLOW_USERNAME,
+			FOLLOWER_USERNAME,
+			FOLLOWER_NAME,
+			FOLLOWER_PIC
+		)
+		VALUES(
+			#{followUsername},
+			#{followerUsername},
+			#{followerName},
+			#{followerPic}
+		)
+	</insert>
+	
+	
+	<select id="selectOneDuplicateFollowId" parameterType="String" resultType="FollowingDTO">
+		SELECT
+				FOLLOWING_USERNAME
+		FROM
+				FOLLOWING
+		WHERE
+				USERNAME = #{username} AND
+				FOLLOWING_USERNAME = #{followingUsername}
+	</select>
+	
+	<select id="followYn" parameterType="hashmap" resultType="String">
+		SELECT
+				FOLLOWING_USERNAME
+		FROM
+				FOLLOWING
+		WHERE
+				USERNAME = #{myUsername} AND
+				FOLLOWING_USERNAME = #{username}
+	</select>
+	
+	<delete id="deleteFollowing" parameterType="followingDTO">
+		DELETE FROM
+				FOLLOWING
+		WHERE
+				FOLLOWING_USERNAME = #{followingUsername} AND
+				USERNAME = #{username}
+	</delete>
+	
+	<delete id="deleteFollower" parameterType="followerDTO">
+		DELETE FROM
+				FOLLOWER
+		WHERE
+				FOLLOW_USERNAME = #{followUsername} AND
+				FOLLOWER_USERNAME = #{followerUsername}
+	</delete>
+	
+</mapper>

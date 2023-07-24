@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="orderMapper">
+
+	<insert id="insertOrder" parameterType="OrderDTO">
+		INSERT INTO
+			`ORDER` (
+				USERNAME,
+			    MEDIA_CD,
+				ORDER_MEDIA_QTY,
+				PAYMENT_AMT,
+			    ORDERER_NM,
+			    ORDERER_HP,
+			    RECEIVER_NM,
+				RECEIVER_HP,
+				ZIPCODE,
+				ROAD_ADDRESS,
+				JIBUN_ADDRESS,
+				NAMUJI_ADDRESS,
+				DELIVERY_METHOD,
+				DELIVERY_MESSAGE,
+			    DELIVERY_STATUS,
+				GIFT_WRAPPING,
+				PAY_METHOD,
+				PAY_ORDERER_HP,
+				CARD_COMPANY_NM,
+			    CARD_PAY_MONTH,
+				PAY_ORDER_TIME
+			)
+			VALUES(
+				#{username},
+			    #{mediaCd},
+			    #{orderMediaQty},
+			    #{paymentAmt},
+			    #{ordererNm},
+                #{ordererHp},
+			    #{receiverNm},
+			    #{receiverHp},
+			    #{zipcode},
+			    #{roadAddress},
+			    #{jibunAddress},
+			    #{namujiAddress},
+                #{deliveryMethod},
+                #{deliveryMessage},
+                'Processing',
+                #{giftWrapping},
+                #{payMethod},
+                #{payOrdererHp},
+                #{cardCompanyNm},
+                #{cardPayMonth},
+                NOW()
+			)
+	</insert>
+
+	<select id="selectOneOrderer" parameterType="String" resultType="MemberDTO">
+		SELECT
+				*
+		FROM
+				MEMBER
+		WHERE
+				USERNAME = #{username}
+	</select>
+	
+	<select id="selectListCartGoods" resultType="PostDTO">
+		SELECT
+				*
+		FROM
+				UPLOAD U
+			 JOIN CART C
+				    ON U.MEDIA_CD = C.MEDIA_CD
+				   AND U.MEDIA_CD IN
+				   		<foreach collection="mediaCdList" item="mediaCd" separator="," open="(" close=")">
+				   			#{mediaCd}
+				   		</foreach>
+		WHERE
+				C.USERNAME = #{username}
+		ORDER BY
+				C.ENROLL_DT DESC
+	</select>
+	
+	<insert id="insertOrderByCart">
+		INSERT INTO `ORDER` (
+			    USERNAME,
+			    MEDIA_CD,
+				ORDER_MEDIA_QTY,
+				PAYMENT_AMT,
+			    ORDERER_NM,
+			    ORDERER_HP,
+			    RECEIVER_NM,
+				RECEIVER_HP,
+				ZIPCODE,
+				ROAD_ADDRESS,
+				JIBUN_ADDRESS,
+				NAMUJI_ADDRESS,
+				DELIVERY_METHOD,
+				DELIVERY_MESSAGE,
+			    DELIVERY_STATUS,
+				GIFT_WRAPPING,
+				PAY_METHOD,
+				PAY_ORDERER_HP,
+				CARD_COMPANY_NM,
+			    CARD_PAY_MONTH,
+				PAY_ORDER_TIME
+		)
+		VALUES 
+			<foreach collection="list" item="orderDTO" separator=",">
+				(
+				    #{orderDTO.username},
+				    #{orderDTO.mediaCd},
+				    #{orderDTO.orderMediaQty},
+				    #{orderDTO.paymentAmt},
+				    #{orderDTO.ordererNm},
+	                #{orderDTO.ordererHp},
+				    #{orderDTO.receiverNm},
+				    #{orderDTO.receiverHp},
+				    #{orderDTO.zipcode},
+				    #{orderDTO.roadAddress},
+				    #{orderDTO.jibunAddress},
+				    #{orderDTO.namujiAddress},
+	                #{orderDTO.deliveryMethod},
+	                #{orderDTO.deliveryMessage},
+	                'Processing',
+	                #{orderDTO.giftWrapping},
+	                #{orderDTO.payMethod},
+	                #{orderDTO.payOrdererHp},
+	                #{orderDTO.cardCompanyNm},
+	                #{orderDTO.cardPayMonth},
+	                NOW()
+		       )
+			</foreach>  
+	</insert>
+	
+	<update id="updateMediaStockCntByCart">
+		<foreach collection="list" item="mediaMap" separator=";">
+			UPDATE
+					UPLOAD
+			SET
+					STOCK = STOCK - #{mediaMap.orderMediaQty}
+			WHERE
+					MEDIA_CD = #{mediaMap.mediaCd}
+		</foreach>
+	</update>
+	
+	<delete id="deleteCartByOrder">
+		DELETE FROM
+				CART
+		WHERE
+				CART_CD IN
+				<foreach collection="array" item="cartCd" separator="," open="(" close=")">
+					#{cartCd}
+				</foreach>
+	</delete>
+	
+	<select id="selectOneCartMedia" parameterType="int" resultType="PostDTO">
+		SELECT
+				*
+		FROM
+				UPLOAD
+		WHERE
+				MEDIA_CD = #{mediaCd}
+	</select>
+</mapper>

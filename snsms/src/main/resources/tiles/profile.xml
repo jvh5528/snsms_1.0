@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	<definition name="newProfile" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/newProfile.jsp"/>
+		<put-attribute name="title" value="Create profile • myFeed"/>
+	</definition>
+	
+	<definition name="myProfile" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/myProfile.jsp"/>
+		<put-attribute name="title" value="My profile • myFeed"/>
+	</definition>
+	
+	
+	<definition name="editProfile" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/editProfile.jsp"/>
+		<put-attribute name="title" value="Edit profile • myFeed"/>
+	</definition>
+	
+	<definition name="passwordRenewal" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/passwordRenewal.jsp"/>
+		<put-attribute name="title" value="Password renewal • myFeed"/>
+	</definition>
+	
+	<definition name="memberList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/memberList.jsp"/>
+		<put-attribute name="title" value="myFeed"/>
+	</definition>
+	
+	<definition name="memberDetail" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/profile/memberDetail.jsp"/>
+		<put-attribute name="title" value="myFeed"/>
+	</definition>
+	
+	<definition name="deleteAccount" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/account/deleteAccount.jsp"/>
+		<put-attribute name="title" value="Delete account • myFeed"/>
+	</definition>
+	
+	<definition name="myCartList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/order/myCartList.jsp"/>
+		<put-attribute name="title" value="Your shopping cart • myFeed"/>
+	</definition>
+	
+	<definition name="myOrderList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/order/myOrderList.jsp"/>
+		<put-attribute name="title" value="My orders • myFeed"/>
+	</definition>
+	
+	<definition name="myIncomingOrderList" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/order/myIncomingOrderList.jsp"/>
+		<put-attribute name="title" value="My incoming orders • myFeed"/>
+	</definition>
+	
+	<definition name="incomingOrderDetail" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/order/incomingOrderDetail.jsp"/>
+		<put-attribute name="title" value="Incoming Order • myFeed"/>
+	</definition>
+	
+	<definition name="myOrderDetail" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/order/myOrderDetail.jsp"/>
+		<put-attribute name="title" value="My orders • myFeed"/>
+	</definition>
+	
+	<definition name="orderCartGoods" extends="default">
+		<put-attribute name="body" value="/WEB-INF/views/client/order/orderCartGoods.jsp"/>
+		<put-attribute name="title" value="Checkout • myFeed"/>
+	</definition>
+	
+</tiles-definitions>
